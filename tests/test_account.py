@@ -14,6 +14,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
@@ -1053,3 +1054,13 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(admin.user['login_id'], 'jdoe')
         self.assertEqual(admin.role, 'AccountAdmin')
         self.assertEqual(admin.role_id, 1)
+    
+    # list_grading_periods()
+    def test_list_grading_periods(self, m):
+        register_uris({'account': ['list_grading_periods']}, m)
+
+        grading_periods = self.account.list_grading_periods()
+        grading_period_list = [grading_period for grading_period in grading_periods]
+
+        self.assertEqual(len(grading_period_list), 2)
+        self.assertIsInstance(grading_period_list[0], GradingPeriod)
