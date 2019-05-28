@@ -7,6 +7,7 @@ from six import python_2_unicode_compatible, text_type, string_types
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
@@ -2346,6 +2347,25 @@ class Course(CanvasObject):
             {'course_id': self.id},
             kwargs=combine_kwargs(**kwargs)
         )
+    def list_grading_periods(self, **kwargs):
+        """
+        List all grading periods for current course.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods \
+        <https://canvas.instructure.com/doc/api/grading_periods.html>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'courses/{}/grading_periods'.format(self.id),
+            _root='grading_periods',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
 
 
 @python_2_unicode_compatible
