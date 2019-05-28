@@ -14,6 +14,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
@@ -1540,6 +1541,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].id, 10)
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
+
+    # list_grading_periods()
+    def test_list_grading_periods(self, m):
+        register_uris({'course': ['list_grading_periods']}, m)
+
+        grading_periods = self.course.list_grading_periods()
+        grading_period_list = [grading_period for grading_period in grading_periods]
+            
+        self.assertEqual(len(grading_period_list), 2)
+        self.assertIsInstance(grading_period_list[0], GradingPeriod)
 
 
 @requests_mock.Mocker()
